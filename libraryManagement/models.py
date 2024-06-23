@@ -7,6 +7,7 @@ from django.db import models
 class User(models.Model):
     user_id = models.AutoField(primary_key=True, unique=True)
     user_name = models.CharField(max_length=256)
+    password = models.CharField(max_length=256)
     email = models.EmailField(max_length=256)
     date_of_membership = models.DateTimeField(auto_now=True)
     number_of_books_borrowed = models.IntegerField(default=0)
@@ -26,10 +27,19 @@ class Author(models.Model):
 
 class Book(models.Model):
     book_id = models.AutoField(primary_key=True, unique=True)
-    STATUS = [("B", "BORROWED"), ("AV", "AVAILABLE")]
+    STATUS = [
+        ("B", "BORROWED"),
+        ("AV", "AVAILABLE")
+    ]
+    GENRE = [
+        ('R', 'ROMANCE'),
+        ('C', 'COMEDY'),
+        ('A', 'ACTION')
+    ]
     title = models.CharField(max_length=255)
     year_published = models.DateField()
     status = models.CharField(max_length=6, choices=STATUS, default="AV")
+    genre = models.CharField(max_length=10, choices=GENRE, default='R')
     ISBN = models.CharField(max_length=13, unique=True)
     date_borrowed = models.DateTimeField(null=True, blank=True)
     borrower = models.ForeignKey(User, null=True, blank=True, related_name='borrowed_books',

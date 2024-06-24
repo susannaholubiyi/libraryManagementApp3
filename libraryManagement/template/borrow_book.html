@@ -1,0 +1,15 @@
+<!-- borrow_book.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Borrow Book</title>
+</head>
+<body>
+    <h1>Borrow Book</h1>
+    <form method="post" action="{% url 'borrow_book' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Borrow</button>
+    </form>
+</body>
+</html>

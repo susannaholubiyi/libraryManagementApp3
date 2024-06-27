@@ -6,7 +6,7 @@ from .models import User, Book, Library, Author
 # Register your models here.
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ['user_id', 'user_name', 'date_of_membership', 'email']
+    list_display = ['user_id', 'user_name','password', 'date_of_membership', 'email']
 
 
 @admin.register(Book)

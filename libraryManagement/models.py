@@ -7,7 +7,7 @@ from django.db import models
 class User(models.Model):
     user_id = models.AutoField(primary_key=True, unique=True)
     user_name = models.CharField(max_length=256)
-    password = models.CharField(max_length=256)
+    password = models.CharField(max_length=256, default='')
     email = models.EmailField(max_length=256)
     date_of_membership = models.DateTimeField(auto_now=True)
     number_of_books_borrowed = models.IntegerField(default=0)
@@ -45,6 +45,7 @@ class Book(models.Model):
     borrower = models.ForeignKey(User, null=True, blank=True, related_name='borrowed_books',
                                  on_delete=models.SET_NULL)
     author = models.ForeignKey(Author, related_name='books', on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='images/', blank=True)
 
     def str(self):
         return f"{self.title}, {self.year_published},{self.status}, {self.ISBN}"

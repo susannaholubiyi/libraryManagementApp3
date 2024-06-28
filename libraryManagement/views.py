@@ -1,15 +1,15 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.hashers import make_password
 from django.shortcuts import redirect, render
-from rest_framework import status, request
+from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from exception.exception import BookNotFoundException, UserNotFoundException, LoginFailedException
+from .forms import BorrowBookForm, CreateUserForm
 from .models import Book, User
 from .serializers import BookSerializer
-from .forms import BorrowBookForm
 
 
 @api_view()
@@ -17,6 +17,19 @@ def view_all_books(request):
     books = Book.objects.all()
     serializer = BookSerializer(books, many=True)
     return Response(serializer.data, status.HTTP_200_OK)
+
+
+@api_view(['POST'])
+def signup(request):
+    form = CreateUserForm(request.POST)
+    if form.is_valid():
+        user = User(user_name=form.cleaned_data['user_name'],
+                    email=form.cleaned_data['email'],
+                    password=make_password(form.cleaned_data['password']),
+                    address=form.cleaned_data['address'])
+        user.save()
+        return Response({"message": "Signed up successfully"}, status=status.HTTP_201_CREATED)
+    return Response({"errors": form.errors, "message": "Failed to sign up"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['POST'])
@@ -50,21 +63,6 @@ def borrow_book(request):
 
 
 @api_view(["POST"])
-def signup(request):
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            login(request, user)
-            user.is_signed_up = True
-            messages.success(request, f'Account created for {user.username}!')
-            return redirect('borrow_book')
-    else:
-        form = UserCreationForm()
-    return render(request, 'signup_user.html', {'form': form})
-
-
-@api_view(["POST"])
 def login(request):
     if request.method == "POST":
         user_name = request.data.get("name")
@@ -79,4 +77,5 @@ def login(request):
                 messages.error(request, 'Invalid username or password.')
         except LoginFailedException as error:
             return render(request, 'login.html')
+
 

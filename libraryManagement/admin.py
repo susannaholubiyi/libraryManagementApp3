@@ -1,12 +1,10 @@
 from django.contrib import admin
 
-from .models import User, Book, Library, Author
+import user.models
+from .models import Book, Library, Author
 
 
 # Register your models here.
-@admin.register(User)
-class UserAdmin(admin.ModelAdmin):
-    list_display = ['user_id', 'user_name','password', 'date_of_membership', 'email']
 
 
 @admin.register(Book)

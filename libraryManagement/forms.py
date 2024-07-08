@@ -1,6 +1,6 @@
 from django import forms
 
-from libraryManagement.models import User
+from user.models import User
 
 
 class BorrowBookForm(forms.Form):

@@ -11,7 +11,9 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 import os.path
 from pathlib import Path
-
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 from django.template.context_processors import media
 
@@ -39,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'djoser',
+    'cloudinary',
     'libraryManagement',
     'rest_framework',
     'user',
@@ -133,3 +136,11 @@ DJOSER = {
         'user_create': 'user.serializers.UserCreateSerializer'
     }
 }
+
+cloudinary.config(
+    cloud_name= 'dbd4aummb',
+    api_key= '762645381836436',
+    api_secret= 'yL60VQ5aN6UmWHaBJ4y0DaJyv_4',
+)
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'

@@ -1,5 +1,6 @@
 from django import forms
 
+from libraryManagement.models import Book
 from user.models import User
 
 
@@ -13,4 +14,10 @@ class CreateUserForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['user_name', 'email', 'password', 'address']
+        fields = ['username', 'email', 'password', 'address']
+
+
+class BookForm(forms.ModelForm):
+    class Meta:
+        model = Book
+        fields = ['title', 'author', 'description', 'ISBN', 'image', 'year_published', 'genre', 'status']
